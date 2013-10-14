@@ -189,13 +189,13 @@ void *esvmCalloc(const size_t nmemb, const size_t size);
 template<class T> class Image
 {
 private:
-	IplImage* imgp;
+	cv::Mat imgp;
 public:
-	Image(IplImage* img=0) {imgp=img;}
-	~Image(){imgp=0;}
-	void operator=(IplImage* img) {imgp=img;}
+	Image(cv::Mat img) {imgp=img;}
+	~Image(){}
+	void operator=(cv::Mat img) {imgp=img;}
 	inline T* operator[](const int rowIndx) {
-		return ((T *)(imgp->imageData + rowIndx*imgp->widthStep));}
+		return ((T *)(imgp.data + rowIndx*imgp.step));}
 };
 
 typedef struct{
@@ -233,13 +233,13 @@ esvmModel *loadExemplars(const char *descFile, int numExemplars);
 
 /*image stuff*/
 esvmImage *readImage(const char *filename);
-int * RgbtoIm(IplImage *img,const int numRows,const int numCols,const int numChannels);
-float * RgbtoImFl(IplImage *img,const int numRows,const int numCols,	const int numChannels);
-float * RgbtoImFlTranspose(IplImage *img,const int numRows,const int numCols,
+int * RgbtoIm(cv::Mat img,const int numRows,const int numCols,const int numChannels);
+float * RgbtoImFl(cv::Mat img,const int numRows,const int numCols,	const int numChannels);
+float * RgbtoImFlTranspose(cv::Mat img,const int numRows,const int numCols,
 		const int numChannels);
-IplImage *ImtoRgb(int *im,const int numRows, const int numCols,const int numChannels);
-IplImage *ImtoRgbFl(float *im,const int numRows, const int numCols, const int numChannels);
-IplImage *ImTransposetoRgb(int *im,const int numRows, const int numCols, 
+cv::Mat ImtoRgb(int *im,const int numRows, const int numCols,const int numChannels);
+cv::Mat ImtoRgbFl(float *im,const int numRows, const int numCols, const int numChannels);
+cv::Mat ImTransposetoRgb(int *im,const int numRows, const int numCols, 
 		const int numChannels);
 
 /*memory stuff*/

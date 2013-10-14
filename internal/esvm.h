@@ -69,7 +69,7 @@ esvmHogPyr *computeHogScaleWrapper(const char *filename,
 		const bool enablePadding=true,
 		const int padding=5,const int userTasks=4,const bool useMexResize=false);
 
-esvmHogPyr *computeHogScale(IplImage *img,const int cellWidth,const int maxLevels,
+esvmHogPyr *computeHogScale(cv::Mat img,const int cellWidth,const int maxLevels,
 		const int minDimension,const int interval,const float minScale,const bool enablePadding,
 		const int padding,const int userTasks,const bool useMexResize=false);
 //#define ESVM_INTERP CV_INTER_NN
@@ -99,8 +99,8 @@ void nms(float *boxes, const int numBoxes, const float overlapThreshold,
 		int *numPruned, float *pruned);
 
 //pipeline
-esvmOutput *esvmSIMEWrapper(esvmParameters *params, const char *imageName, esvmModel *model);
-esvmOutput *esvmSIME(esvmParameters *params, IplImage *img, esvmModel *model);
+esvmOutput *esvmSIMEWrapper(esvmParameters *params, cv::Mat img, esvmModel *model);
+esvmOutput *esvmSIME(esvmParameters *params, cv::Mat img, esvmModel *model);
 esvmParameters *esvmDefaultParameters();
 esvmOutput **esvmMIMEWrapper(esvmParameters *params, const char **imageNames, int numImages, esvmModel *model);
 

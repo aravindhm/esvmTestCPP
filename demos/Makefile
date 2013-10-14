@@ -1,17 +1,18 @@
-DEMOFILES=demo00.cpp demo01.cpp demo02.cpp demo03.cpp
+#DEMOFILES=demo00.cpp demo01.cpp demo02.cpp demo03.cpp
+DEMOFILES=busdetect.cpp
 
-CXX=g++ -m64
+CXX=g++ -m32#-m64
 CXXFLAGS=-fopenmp
 
 #architecture specific flags
-ARCHFLAGS=-march=corei7-avx -mavx
+ARCHFLAGS=#-march=corei7-avx -mavx
 OPTFLAGS= -O3  -ftree-vectorize 
 ESVMFLAGS=-D ESVM_PERFORMANCE_COUNTERS -D ESVM_CONFIG_ALIGN_MEMORY
 DEBUGFLAGS=-g -rdynamic
 #-g -rdynamic help in printing a good stack trace
-ISPC=../common/ispc-64bit-linux
+ISPC=../common/ispc-32bit-linux #Changed 64 to 32
 # architecture specific flags
-ISPCARCHFLAGS=--target=avx --arch=x86-64 --cpu=corei7-avx 
+ISPCARCHFLAGS=--target=sse2-i32x4 --arch=x86#--target=avx --arch=x86-64 --cpu=corei7-avx 
 ISPCFLAGS=-O2 --math-lib=fast --opt=fast-masked-vload --wno-perf
 
 APP_NAME=$(DEMOFILES:.cpp=.out)
@@ -26,7 +27,7 @@ TASKSYS_LIB=-lpthread
 TASKSYS_OBJ=$(addprefix $(OBJDIR)/, $(subst $(COMMONDIR)/,, $(TASKSYS_CXX:.cpp=.o)))
 
 CXXINCLUDE=-I$(ISPC_COMMONDIR) -I$(OBJDIR) -I$(ESVM_DIR) `pkg-config --cflags opencv`
-LDFLAGS=-lm `pkg-config --libs opencv` $(TASKSYS_LIB)
+LDFLAGS=-lm `pkg-config --libs opencv` $(TASKSYS_LIB) -lrt
 
 default: all
 

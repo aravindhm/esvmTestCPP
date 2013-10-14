@@ -46,10 +46,10 @@ esvmImage *readImage(const char *filename)
 {
 
 
-	IplImage *img = cvLoadImage(filename,CV_LOAD_IMAGE_COLOR); //force a color image
+	cv::Mat img = cv::imread(filename,CV_LOAD_IMAGE_COLOR); //force a color image
 	RgbImage imarr(img);
-	int numRows = img->height;
-	int numCols = img->width;
+	int numRows = img.rows;
+	int numCols = img.cols;
 	int numChannels = 3;
 
 	int *im = (int *)esvmMalloc(sizeof(int)*numRows*numCols*numChannels);
@@ -78,7 +78,7 @@ esvmImage *readImage(const char *filename)
 }
 
 
-int * RgbtoIm(IplImage *img,const int numRows,const int numCols,
+int * RgbtoIm(cv::Mat img,const int numRows,const int numCols,
 		const int numChannels)
 {
 	assert(numChannels==3);
@@ -103,7 +103,7 @@ int * RgbtoIm(IplImage *img,const int numRows,const int numCols,
 
 }
 
-float * RgbtoImFl(IplImage *img,const int numRows,const int numCols,
+float * RgbtoImFl(cv::Mat img,const int numRows,const int numCols,
 		const int numChannels)
 {
 	assert(numChannels==3);
@@ -128,7 +128,7 @@ float * RgbtoImFl(IplImage *img,const int numRows,const int numCols,
 
 }
 
-float * RgbtoImFlTranspose(IplImage *img,const int numRows,const int numCols,
+float * RgbtoImFlTranspose(cv::Mat img,const int numRows,const int numCols,
 		const int numChannels)
 {
 	assert(numChannels==3);
@@ -153,11 +153,11 @@ float * RgbtoImFlTranspose(IplImage *img,const int numRows,const int numCols,
 
 }
 
-IplImage *ImtoRgb(int *im,const int numRows, const int numCols, 
+cv::Mat ImtoRgb(int *im,const int numRows, const int numCols, 
 		const int numChannels)
 {
 	assert(numChannels==3);
-	IplImage *img = cvCreateImage(cvSize(numCols,numRows),8,numChannels);
+	cv::Mat img(numCols,numRows,8,numChannels);
 	RgbImage imarr(img);
 	
 	int dim1 = numCols*numRows;
@@ -176,11 +176,11 @@ IplImage *ImtoRgb(int *im,const int numRows, const int numCols,
 	return img;
 }
 
-IplImage *ImtoRgbFl(float *im,const int numRows, const int numCols, 
+cv::Mat ImtoRgbFl(float *im,const int numRows, const int numCols, 
 		const int numChannels)
 {
 	assert(numChannels==3);
-	IplImage *img = cvCreateImage(cvSize(numCols,numRows),8,numChannels);
+	cv::Mat img(numCols,numRows,8,numChannels);
 	RgbImage imarr(img);
 	
 	int dim1 = numCols*numRows;
@@ -199,11 +199,11 @@ IplImage *ImtoRgbFl(float *im,const int numRows, const int numCols,
 	return img;
 }
 
-IplImage *ImTransposetoRgb(int *im,const int numRows, const int numCols, 
+cv::Mat ImTransposetoRgb(int *im,const int numRows, const int numCols, 
 		const int numChannels)
 {
 	assert(numChannels==3);
-	IplImage *img = cvCreateImage(cvSize(numCols,numRows),8,numChannels);
+	cv::Mat img(numCols,numRows,8,numChannels);
 	RgbImage imarr(img);
 	
 	int dim1 = numCols*numRows;

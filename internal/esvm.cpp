@@ -466,20 +466,20 @@ esvmHogPyr *computeHogScaleWrapper(const char *filename,const int cellWidth,
 		const float minScale,const bool enablePadding,const int padding,const int userTasks,
 		const bool useMexResize)
 {
-	IplImage *img = cvLoadImage(filename,CV_LOAD_IMAGE_COLOR); //force a color image
+	cv::Mat img = cv::imread(filename,CV_LOAD_IMAGE_COLOR); //force a color image
 	return computeHogScale(img,cellWidth,
 			maxLevels,minDimension,interval,
 			minScale,enablePadding,padding,userTasks,
 			useMexResize);
 }
 
-esvmHogPyr *computeHogScale(IplImage *img,const int cellWidth,
+esvmHogPyr *computeHogScale(cv::Mat img,const int cellWidth,
 		const int maxLevels,const int minDimension,const int interval,
 		const float minScale,const bool enablePadding,const int padding,const int userTasks,
 		const bool useMexResize)
 {
-	int numRows = img->height;
-	int numCols = img->width;
+	int numRows = img.rows;
+	int numCols = img.cols;
 	int numChannels = 3;
 	float sc = pow(2,1.0/interval);
 	esvmHog **pyr = (esvmHog **)esvmCalloc(maxLevels,sizeof(esvmHog *));
@@ -495,7 +495,7 @@ esvmHogPyr *computeHogScale(IplImage *img,const int cellWidth,
 	
 	int counter = 1;
 	float *flIm;
-	IplImage *dst;
+	cv::Mat dst;
 	if(useMexResize==true) {
 		flIm = RgbtoImFlTranspose(img,numRows,numCols,numChannels);
 	}
@@ -513,8 +513,8 @@ esvmHogPyr *computeHogScale(IplImage *img,const int cellWidth,
 
 		int *im;
 		if(useMexResize==false) {
-			dst = cvCreateImage(cvSize((int)nc,(int)nr),img->depth,numChannels);		
-			cvResize(img,dst,ESVM_INTERP);
+			dst.create((int)nc,(int)nr,img.type());
+			cv::resize(img,dst,dst.size(), 0, 0, ESVM_INTERP);
 
 			im = RgbtoIm(dst,(int)nr,(int)nc,numChannels);
 		}
@@ -531,8 +531,8 @@ esvmHogPyr *computeHogScale(IplImage *img,const int cellWidth,
 
 		counter++;
 		
-		if(useMexResize==false)		
-			cvReleaseImage(&dst);
+		//if(useMexResize==false)		
+		//	cvReleaseImage(&dst);
 
 		free(im);
 		
@@ -561,7 +561,7 @@ esvmHogPyr *computeHogScale(IplImage *img,const int cellWidth,
 	//FIXME:: We can shrink pyr from maxLevels to counter, using realloc.
 	//It is not a serious problem since pyr actually contains maxLevels*sizeof(esvmHog *) bytes
 
-	cvReleaseImage(&img);
+	//cvReleaseImage(&img);
 	if(useMexResize==true)
 		free(flIm);
 
@@ -835,9 +835,9 @@ esvmParameters *esvmDefaultParameters()
 
 }
 
-esvmOutput *esvmSIMEWrapper(esvmParameters *params, const char *imageName, esvmModel *model) 
+esvmOutput *esvmSIMEWrapper(esvmParameters *params, cv::Mat img, esvmModel *model) 
 {
-	IplImage *img = cvLoadImage(imageName,CV_LOAD_IMAGE_COLOR);
+	//IplImage *img = cvLoadImage(imageName,CV_LOAD_IMAGE_COLOR);
 	esvmOutput *op = esvmSIME(params,img,model);
  
 	if(params->flipImage == true) {
@@ -848,7 +848,7 @@ esvmOutput *esvmSIMEWrapper(esvmParameters *params, const char *imageName, esvmM
 	
 }
 
-esvmOutput *esvmSIME(esvmParameters *params, IplImage *img, esvmModel *model)
+esvmOutput *esvmSIME(esvmParameters *params, cv::Mat img, esvmModel *model)
 {
 
 	//userTasks needs to be greater than 4.
@@ -1069,7 +1069,8 @@ esvmOutput **esvmMIMEWrapper(esvmParameters *params, const char **imageNames, in
 
 	//parallel loop
 	for(int i=0;i<numImages;i++) {
-		outputs[i] = esvmSIMEWrapper(params,imageNames[i],model);
+                cv::Mat img = cv::imread(imageNames[i], CV_LOAD_IMAGE_COLOR);
+		outputs[i] = esvmSIMEWrapper(params, img, model);
 	}
 
 	return outputs;
