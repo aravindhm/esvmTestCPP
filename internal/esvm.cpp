@@ -811,28 +811,29 @@ void psort(float* in, int m, int K, float* out0, int* out1)
 }
 
 
+esvmParameters::esvmParameters() {
+	cellWidth = 8;
+	maxHogLevels = 200;
+	minHogDim = 5;
+	levelsPerOctave = 10;
+	minImageScale = 0.01;
+	hogPadding = 5; //padder parameter in matlab
+	hogEnablePadding = ESVM_PAD;
+	convEnablePadding = ESVM_NO_PAD;
+	detectionThreshold = -1.0;
+	nmsOverlapThreshold = 0.5;
+	maxWindowsPerExemplar = 10;
+	maxTotalBoxesPerExemplar = 100;
+	userTasks = 4;
+	useMexResize = true;
+	flipImage = false;
+	saveHogPyr = true;
+}
+
 esvmParameters *esvmDefaultParameters()
 {
 	esvmParameters *params = (esvmParameters *)esvmMalloc(sizeof(esvmParameters));
-	params->cellWidth = 8;
-	params->maxHogLevels = 200;
-	params->minHogDim = 5;
-	params->levelsPerOctave = 10;
-	params->minImageScale = 0.01;
-	params->hogPadding = 5; //padder parameter in matlab
-	params->hogEnablePadding = ESVM_PAD;
-	params->convEnablePadding = ESVM_NO_PAD;
-	params->detectionThreshold = -1.0;
-	params->nmsOverlapThreshold = 0.5;
-	params->maxWindowsPerExemplar = 10;
-	params->maxTotalBoxesPerExemplar = 100;
-	params->userTasks = 4;
-	params->useMexResize = true;
-	params->flipImage = false;
-	params->saveHogPyr = true;
-
 	return params;
-
 }
 
 esvmOutput *esvmSIMEWrapper(esvmParameters *params, cv::Mat img, esvmModel *model) 
