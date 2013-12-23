@@ -1008,7 +1008,6 @@ esvmOutput *esvmSIME(esvmParameters *params, cv::Mat img, esvmModel *model)
 	
 	//perform nms on each exemplar's boxes
 	esvmBoxes *nmsBoxesArr = (esvmBoxes *)esvmCalloc(numWeights*hogpyr->num,sizeof(esvmBoxes));
-	
 	int totalBoxes = 0;
 	for(int w=0;w<numWeights;w++) {	
 

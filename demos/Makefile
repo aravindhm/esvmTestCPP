@@ -1,5 +1,5 @@
-#DEMOFILES=demo00.cpp demo01.cpp demo02.cpp demo03.cpp
-DEMOFILES=busdetect.cpp
+DEMOFILES=demo00.cpp demo01.cpp demo02.cpp demo03.cpp
+#DEMOFILES=busdetect.cpp
 
 CXX=g++ -m32#-m64
 CXXFLAGS=-fopenmp
